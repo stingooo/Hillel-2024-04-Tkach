@@ -62,7 +62,7 @@ storage: list[dict] = [
 ]
 
 
-def generate_id():
+def generate_id() -> int:
     students_ids = [student["id"] for student in storage]
     new_id = len(storage) + 1
     while new_id in students_ids:
