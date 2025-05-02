@@ -1,3 +1,5 @@
+from fuzzywuzzy import fuzz
+
 storage: list[dict] = [
     {
         "id": 1,
@@ -64,9 +66,7 @@ storage: list[dict] = [
 
 def generate_id() -> int:
     students_ids = [student["id"] for student in storage]
-    new_id = len(storage) + 1
-    while new_id in students_ids:
-        new_id += 1
+    new_id = max(students_ids) + 1
     return new_id
 
 
@@ -135,8 +135,8 @@ def update_student_data(student_id: int) -> dict | None:
                     new_info: str = input("Please Enter a NEW Info :")
                     if new_info:
                         current_info: str = storage[index]["info"]
-                        if new_info != current_info:
-                            new_info = new_info.replace(current_info, "")
+                        info_match = fuzz.token_sort_ratio(new_info, current_info)
+                        if info_match < 50:
                             storage[index]["info"] += ", " + new_info
                         else:
                             storage[index]["info"] = new_info
@@ -156,14 +156,15 @@ def update_student_data(student_id: int) -> dict | None:
                     new_info: str = input("Please Enter a NEW Info :")
                     if new_info:
                         current_info: str = storage[index]["info"]
-                        if new_info != current_info:
-                            new_info = new_info.replace(current_info, "")
+                        info_match = fuzz.token_sort_ratio(new_info, current_info)
+                        if info_match < 50:
                             storage[index]["info"] += ", " + new_info
                         else:
                             storage[index]["info"] = new_info
                     else:
                         return None
-                return target
+
+                return storage[index]
 
 
 def show_students():
@@ -241,12 +242,19 @@ def student_management_command_handle(command: str):
             print("Student not Found")
     elif command == "update":
         show_students()
-        student_id: int = int(input("Please Enter Student ID to UPDATE: "))
-        updated_student = update_student_data(student_id)
-        if updated_student:
-            print(f"{updated_student['name']} updated accordingly ...")
-        else:
+        try:
+            student_id: int = int(input("Please Enter Student ID to UPDATE: "))
+            if student_id:
+                updated_student = update_student_data(student_id)
+                if updated_student:
+                    print(f"{updated_student['name']} updated accordingly ...")
+                else:
+                    print("Error to Update")
+        except ValueError:
             print("Error to Update")
+
+
+
 
 
 def main():
