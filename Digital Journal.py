@@ -84,6 +84,88 @@ def add_student(student: dict) -> dict:
         return student
 
 
+def add_marks(target_id: int, raw_marks: str) -> dict | None:
+    """
+    Function to add Marks
+    """
+    for index, target in enumerate(storage):
+        if target_id == target["id"]:
+            marks_to_add: list = [int(i) for i in raw_marks.replace(" ", "").split(",") if i]
+            storage[index]['marks'].extend(marks_to_add)
+            return target
+
+
+def update_student_data(student_id: int) -> dict | None:
+    """
+    Function to update student data
+    """
+    if student_id not in [ids['id'] for ids in storage]:
+        return None
+    else:
+        for index, target in enumerate(storage):
+            if student_id == target["id"]:
+                print(f"What you Like to update for {storage[index]['name']}?\n"
+                      f"{'For Name Enter  ':<25} '1'\n"
+                      f"{'For Marks Enter  ':<25} '2'\n"
+                      f"{'For Info Enter  ':<25} '3'\n"
+                      f"{'For Marks and Info Enter':<25} '4'\n"
+                      f"===========================")
+                item_to_update = input("Please select :")
+                if item_to_update == "1":
+                    new_name: str = input("Please Enter a NEW Name :")
+                    if new_name:
+                        storage[index]["name"] = new_name
+                        storage[index]["marks"] = []
+                        storage[index]["info"] = ""
+                        print("Name is Updated, marks and info erased due to new Name")
+                    else:
+                        return None
+                elif item_to_update == "2":
+                    marks = input("Please Input a new Marks, separated by ',' :")
+                    if marks:
+                        try:
+                            storage[index]["marks"] = [int(item) for item in marks.replace(" ", "").split(",")]
+                        except ValueError:
+                            print("Invalid input, Marks will be saved as Empty")
+                            storage[index]["marks"] = []
+                            return None
+                    else:
+                        return None
+                elif item_to_update == "3":
+                    new_info: str = input("Please Enter a NEW Info :")
+                    if new_info:
+                        current_info: str = storage[index]["info"]
+                        if new_info != current_info:
+                            new_info = new_info.replace(current_info, "")
+                            storage[index]["info"] += ", " + new_info
+                        else:
+                            storage[index]["info"] = new_info
+                    else:
+                        return None
+                elif item_to_update == "4":
+                    marks = input("Please Input a new Marks, separated by ',' :")
+                    if marks:
+                        try:
+                            storage[index]["marks"] = [int(item) for item in marks.replace(" ", "").split(",")]
+                        except ValueError:
+                            print("Invalid input, Marks will be saved as Empty")
+                            storage[index]["marks"] = []
+                            return None
+                    else:
+                        return None
+                    new_info: str = input("Please Enter a NEW Info :")
+                    if new_info:
+                        current_info: str = storage[index]["info"]
+                        if new_info != current_info:
+                            new_info = new_info.replace(current_info, "")
+                            storage[index]["info"] += ", " + new_info
+                        else:
+                            storage[index]["info"] = new_info
+                    else:
+                        return None
+                return target
+
+
 def show_students():
     print("=========================\n")
     for student in storage:
@@ -148,11 +230,28 @@ def student_management_command_handle(command: str):
             search_student(student_id=int(student_id))
         else:
             print("Student's name is required to search")
+    elif command == "marks":
+        show_students()
+        target_id = int(input("Please Enter The Student ID to add marks:"))
+        if target_id in [ids['id'] for ids in storage]:
+            raw_marks = input("Please input the marks to add separated by ',':")
+            target = add_marks(target_id, raw_marks)
+            print(f"{target['name']} Marks added...")
+        else:
+            print("Student not Found")
+    elif command == "update":
+        show_students()
+        student_id: int = int(input("Please Enter Student ID to UPDATE: "))
+        updated_student = update_student_data(student_id)
+        if updated_student:
+            print(f"{updated_student['name']} updated accordingly ...")
+        else:
+            print("Error to Update")
 
 
 def main():
     OPERATIONAL_COMMANDS = ("quit", "help")
-    STUDENT_MANAGEMENT_COMMANDS = ("show", "add", "search")
+    STUDENT_MANAGEMENT_COMMANDS = ("show", "add", "search", "marks", "update")
     AVAILABLE_COMMANDS = (*OPERATIONAL_COMMANDS, *STUDENT_MANAGEMENT_COMMANDS)
 
     HELP_MESSAGE = (
