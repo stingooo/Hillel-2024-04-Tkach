@@ -218,7 +218,7 @@ def ask_student_payload() -> dict:
 def student_management_command_handle(command: str):
     if command == "show":
         show_students()
-    elif command == "add":
+    elif command == "add_student":
         data = ask_student_payload()
         if data:
             student: dict = add_student(data)
@@ -231,7 +231,7 @@ def student_management_command_handle(command: str):
             search_student(student_id=int(student_id))
         else:
             print("Student's name is required to search")
-    elif command == "marks":
+    elif command == "add_marks":
         show_students()
         target_id = int(input("Please Enter The Student ID to add marks:"))
         if target_id in [ids['id'] for ids in storage]:
@@ -254,12 +254,9 @@ def student_management_command_handle(command: str):
             print("Error to Update")
 
 
-
-
-
 def main():
     OPERATIONAL_COMMANDS = ("quit", "help")
-    STUDENT_MANAGEMENT_COMMANDS = ("show", "add", "search", "marks", "update")
+    STUDENT_MANAGEMENT_COMMANDS = ("show", "add_student", "search", "add_marks", "update")
     AVAILABLE_COMMANDS = (*OPERATIONAL_COMMANDS, *STUDENT_MANAGEMENT_COMMANDS)
 
     HELP_MESSAGE = (
