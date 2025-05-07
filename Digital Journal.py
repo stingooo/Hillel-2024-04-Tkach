@@ -99,6 +99,28 @@ def update_student_data(student_id: int) -> dict | None:
     """
     Function to update student data
     """
+    def change_name():
+        storage[index]["name"] = new_name
+        storage[index]["marks"] = []
+        storage[index]["info"] = ""
+        print("Name is Updated, marks and info erased due to new Name")
+
+    def additional_marks():
+        try:
+            storage[index]["marks"] = [int(item) for item in marks.replace(" ", "").split(",")]
+        except ValueError:
+            print("Invalid input, Marks will be saved as Empty")
+            storage[index]["marks"] = []
+            return None
+
+    def change_info():
+        current_info: str = storage[index]["info"]
+        info_match = fuzz.token_sort_ratio(new_info, current_info)
+        if info_match < 50:
+            storage[index]["info"] += ", " + new_info
+        else:
+            storage[index]["info"] = new_info
+
     if student_id not in [ids['id'] for ids in storage]:
         return None
     else:
@@ -114,53 +136,30 @@ def update_student_data(student_id: int) -> dict | None:
                 if item_to_update == "1":
                     new_name: str = input("Please Enter a NEW Name :")
                     if new_name:
-                        storage[index]["name"] = new_name
-                        storage[index]["marks"] = []
-                        storage[index]["info"] = ""
-                        print("Name is Updated, marks and info erased due to new Name")
+                        change_name()
                     else:
                         return None
                 elif item_to_update == "2":
                     marks = input("Please Input a new Marks, separated by ',' :")
                     if marks:
-                        try:
-                            storage[index]["marks"] = [int(item) for item in marks.replace(" ", "").split(",")]
-                        except ValueError:
-                            print("Invalid input, Marks will be saved as Empty")
-                            storage[index]["marks"] = []
-                            return None
+                        additional_marks()
                     else:
                         return None
                 elif item_to_update == "3":
                     new_info: str = input("Please Enter a NEW Info :")
                     if new_info:
-                        current_info: str = storage[index]["info"]
-                        info_match = fuzz.token_sort_ratio(new_info, current_info)
-                        if info_match < 50:
-                            storage[index]["info"] += ", " + new_info
-                        else:
-                            storage[index]["info"] = new_info
+                        change_info()
                     else:
                         return None
                 elif item_to_update == "4":
                     marks = input("Please Input a new Marks, separated by ',' :")
                     if marks:
-                        try:
-                            storage[index]["marks"] = [int(item) for item in marks.replace(" ", "").split(",")]
-                        except ValueError:
-                            print("Invalid input, Marks will be saved as Empty")
-                            storage[index]["marks"] = []
-                            return None
+                        additional_marks()
                     else:
                         return None
                     new_info: str = input("Please Enter a NEW Info :")
                     if new_info:
-                        current_info: str = storage[index]["info"]
-                        info_match = fuzz.token_sort_ratio(new_info, current_info)
-                        if info_match < 50:
-                            storage[index]["info"] += ", " + new_info
-                        else:
-                            storage[index]["info"] = new_info
+                        change_info()
                     else:
                         return None
 
