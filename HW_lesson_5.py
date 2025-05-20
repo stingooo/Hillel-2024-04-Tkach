@@ -19,7 +19,7 @@ class Price:
             raise ValueError("Can perform operations only with `Price` objects")
         else:
             if self.currency != other.currency:
-                if other.currency in Price.rates.keys():
+                if other.currency in Price.rates.keys() and self.currency in Price.rates.keys():
                     if self.currency.upper() == "USD":
                         self.value, other.value = self.value * Price.rates[self.currency], other.value * Price.rates[
                             other.currency]
@@ -38,7 +38,7 @@ class Price:
             raise ValueError("Can perform operations only with `Price` objects")
         else:
             if self.currency != other.currency:
-                if other.currency in Price.rates.keys():
+                if other.currency in Price.rates.keys() and self.currency in Price.rates.keys():
                     if self.currency.upper() == "USD":
                         self.value, other.value = self.value * Price.rates[self.currency], other.value * Price.rates[
                             other.currency]
@@ -56,7 +56,7 @@ class Price:
 phone = Price(500, "usd")
 tablet = Price(50, "eur")
 
-total: Price = phone + tablet
+total: Price = phone - tablet
 print(total)
 
 
