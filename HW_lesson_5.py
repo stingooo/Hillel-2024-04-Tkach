@@ -3,13 +3,23 @@ from typing import Any
 
 class Price:
     rates = {
-        "USD": 41.62,
-        "EUR": 46.94,
+        "USD": {"CHF": 0.83},
+        "EUR": {"CHF": 0.94},
+        "UAH": {"CHF": 0.02},
+        "CHF": {"USD": 1.21,
+                "EUR": 1.07,
+                "UAH": 50.17}
     }
 
     def __init__(self, value: int, currency: str):
         self.value: int = value
         self.currency: str = currency.upper()
+
+    @staticmethod
+    def _to_chf(to_convert: "Price") -> "Price":
+        to_convert.value = to_convert.value * Price.rates[to_convert.currency]["CHF"]
+        to_convert.currency = "CHF"
+        return to_convert
 
     def __str__(self):
         return f"{self.value:.2f} {self.currency}"
@@ -20,14 +30,11 @@ class Price:
         else:
             if self.currency != other.currency:
                 if other.currency in Price.rates.keys() and self.currency in Price.rates.keys():
-                    if self.currency.upper() == "USD":
-                        self.value, other.value = self.value * Price.rates[self.currency], other.value * Price.rates[
-                            other.currency]
-                        return Price((self.value + other.value) / Price.rates[self.currency], self.currency.upper())
-                    elif self.currency.upper() == "EUR":
-                        self.value, other.value = self.value * Price.rates[self.currency], other.value * Price.rates[
-                            other.currency]
-                        return Price((self.value + other.value) / Price.rates[self.currency], self.currency.upper())
+                    target_currency = self.currency
+                    result = self._to_chf(self) + self._to_chf(other)
+                    result.value, result.currency = (result.value * Price.rates[result.currency][target_currency],
+                                                     target_currency)
+                    return result
                 else:
                     print("Currency not Supported")
             else:
@@ -39,24 +46,21 @@ class Price:
         else:
             if self.currency != other.currency:
                 if other.currency in Price.rates.keys() and self.currency in Price.rates.keys():
-                    if self.currency.upper() == "USD":
-                        self.value, other.value = self.value * Price.rates[self.currency], other.value * Price.rates[
-                            other.currency]
-                        return Price((self.value - other.value) / Price.rates[self.currency], self.currency.upper())
-                    elif self.currency.upper() == "EUR":
-                        self.value, other.value = self.value * Price.rates[self.currency], other.value * Price.rates[
-                            other.currency]
-                        return Price((self.value - other.value) / Price.rates[self.currency], self.currency.upper())
+                    target_currency = self.currency
+                    result = self._to_chf(self) - self._to_chf(other)
+                    result.value, result.currency = (result.value * Price.rates[result.currency][target_currency],
+                                                     target_currency)
+                    return result
                 else:
                     print("Currency not Supported")
             else:
                 return Price(self.value - other.value, self.currency.upper())
 
 
-phone = Price(500, "usd")
-tablet = Price(50, "eur")
+phone = Price(500, "eur")
+tablet = Price(50, "usd")
 
-total: Price = phone - tablet
+total: Price = phone + tablet
 print(total)
 
 
