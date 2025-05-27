@@ -12,7 +12,7 @@ class Price:
     }
 
     def __init__(self, value: int, currency: str):
-        self.value: int = value
+        self.value: int | float = value
         self.currency: str = currency.upper()
 
     @staticmethod

@@ -17,7 +17,6 @@ class User:
               f"Email: {self.email}\n"
               f"--------------\n{notification}--------------\n")
         #  print out or log the notification
-        pass
 
 
 class Notification:
@@ -27,38 +26,39 @@ class Notification:
         self.attachment = attachment  # Optional extra info
 
     def __str__(self):
-        return f"Subject: {self.subject}\n\n Message: {self.message}\n Additional attachment: {self.attachment}\n"
+        return self.format()
 
     def format(self) -> str:
-        #  implement basic notification formatting
-        #  think about `__str__` usage instead of `format`
-        pass
+        return f"Subject: {self.subject}\n\n Message: {self.message}\n Additional attachment: {self.attachment}\n"
 
 
 class StudentNotification(Notification):
     def __init__(self, subject: str, message: str, attachment: str = ""):
         super().__init__(
             subject=subject,
-            message="".join((message, "\n\nSent via Student Portal")),
+            message=message,
             attachment=attachment
         )
 
+    def __str__(self):
+        return self.format()
+
     def format(self) -> str:
-        #  add "Sent via Student Portal" to the message
-        pass
+        return "".join((self.message, "\n\nSent via Student Portal\n"))
 
 
 class TeacherNotification(Notification):
     def __init__(self, subject: str, message: str, attachment: str = ""):
         super().__init__(
             subject=subject,
-            message="".join((message, "\n\nTeacher's Desk Notification")),
+            message=message,
             attachment=attachment
         )
-    def format(self)\
-            -> str:
-        #  add "Teacher's Desk Notification" to the message
-        pass
+    def __str__(self):
+        return self.format()
+
+    def format(self):
+        return "".join((self.message, "\n\nTeacher's Desk Notification\n"))
 
 
 def main():
@@ -74,7 +74,6 @@ def main():
     #  create users of both types
     #  create notifications
     #  have users print (aka send) their notifications
-    pass
 
 
 if __name__ == "__main__":
