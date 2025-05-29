@@ -24,7 +24,7 @@ class Price:
     def __str__(self):
         return f"{self.value:.2f} {self.currency}"
 
-    def __add__(self, other: Any) -> "Price":
+    def __add__(self, other: Any) -> "Price | None":
         if not isinstance(other, Price):
             raise ValueError("Can perform operations only with `Price` objects")
         else:
@@ -37,10 +37,11 @@ class Price:
                     return result
                 else:
                     print("Currency not Supported")
+                    return None
             else:
                 return Price(self.value + other.value, self.currency.upper())
 
-    def __sub__(self, other: Any) -> "Price":
+    def __sub__(self, other: Any) -> "Price | None":
         if not isinstance(other, Price):
             raise ValueError("Can perform operations only with `Price` objects")
         else:
@@ -53,6 +54,7 @@ class Price:
                     return result
                 else:
                     print("Currency not Supported")
+                    return None
             else:
                 return Price(self.value - other.value, self.currency.upper())
 
