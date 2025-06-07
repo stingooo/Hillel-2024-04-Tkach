@@ -8,4 +8,3 @@
 8;William Anderson;[(1, datetime.date(2025, 6, 7)), (5, datetime.date(2025, 6, 7)), (8, datetime.date(2025, 6, 7)), (6, datetime.date(2025, 6, 7)), (9, datetime.date(2025, 6, 7)), (8, datetime.date(2025, 6, 7))];William Anderson is 18 y.o. Interests: chemistry
 9;Isabella Thomas;[(1, datetime.date(2025, 6, 7)), (5, datetime.date(2025, 6, 7)), (8, datetime.date(2025, 6, 7)), (6, datetime.date(2025, 6, 7)), (9, datetime.date(2025, 6, 7)), (8, datetime.date(2025, 6, 7))];Isabella Thomas is 19 y.o. Interests: biology
 10;Benjamin Jackson;[(1, datetime.date(2025, 6, 7)), (5, datetime.date(2025, 6, 7)), (8, datetime.date(2025, 6, 7)), (6, datetime.date(2025, 6, 7)), (9, datetime.date(2025, 6, 7)), (8, datetime.date(2025, 6, 7))];Benjamin Jackson is 20 y.o. Interests: history
-11;good;[(1, datetime.date(2025, 6, 7)), (5, datetime.date(2025, 6, 7)), (3, datetime.date(2025, 6, 7)), (4, datetime.date(2025, 6, 7))];No info

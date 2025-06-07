@@ -281,7 +281,8 @@ def student_management_command_handle(command: str, loop :asyncio.AbstractEventL
         if data:
             student_service.add_student(data)
             print(f"Student: {data['name']} is added with ID {data['id']}")
-            loop.create_task(repository.update_storage())
+            task = loop.create_task(repository.update_storage())
+            tasks.add(task)
         else:
             print("The student's data is NOT correct. Please try again")
     elif command == "search_student":
@@ -297,7 +298,8 @@ def student_management_command_handle(command: str, loop :asyncio.AbstractEventL
         if target_id in [ids['id'] for ids in repository.students]:
             raw_marks = input("Please input the marks to add separated by ',':")
             target = student_service.add_marks(target_id, raw_marks)
-            loop.create_task(repository.update_storage())
+            task = loop.create_task(repository.update_storage())
+            tasks.add(task)
             print(f"{target['name']} Marks added...")
         else:
             print("Student not Found")
@@ -308,7 +310,8 @@ def student_management_command_handle(command: str, loop :asyncio.AbstractEventL
             updated_student = student_service.update_student_data(student_id)
             if updated_student:
                 print(f"{updated_student['name']} updated accordingly ...")
-                loop.create_task(repository.update_storage())
+                task = loop.create_task(repository.update_storage())
+                tasks.add(task)
             else:
                 print("Error to Update")
     elif command == "delete_student":
@@ -316,13 +319,16 @@ def student_management_command_handle(command: str, loop :asyncio.AbstractEventL
         student_id: str = input("Please Enter Student ID to DELETE: ")
         if student_id in [ids['id'] for ids in repository.students]:
             student_service.delete_student(student_id)
-            loop.create_task(repository.update_storage())
+            task = loop.create_task(repository.update_storage())
+            tasks.add(task)
         else:
             print("Student not Found")
     elif command == "send_daily":
-        loop.create_task(sender1.daily_email_send("sashamixa14@gmail.com"))
+        task = loop.create_task(sender1.daily_email_send("sashamixa14@gmail.com"))
+        tasks.add(task)
     elif command == "send_monthly":
-        loop.create_task(sender1.monthly_email_send("sashamixa14@gmail.com"))
+        task = loop.create_task(sender1.monthly_email_send("sashamixa14@gmail.com"))
+        tasks.add(task)
 
 
 async def crawler():
@@ -333,7 +339,6 @@ async def crawler():
         else:
             done, pending = await asyncio.wait(tasks, timeout=refresh_time)
             tasks -= done
-
 
 def main():
 
